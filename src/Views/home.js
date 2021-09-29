@@ -12,12 +12,14 @@ export default function HomePage() {
     const [totalPages, setTotalPages] = useState(0)
     const [page, setPage] = useState(1)
     const [searchTitle, setSearchTitle] = useState("")
+    const [isLoading, setIsloading] = useState(true)
 
     const getMovies = async () => {
         api.get(`/movie/popular?api_key=05219aef37ad48f79afaed988d4298e6&language=en-US&page=${page}`)
             .then(res => {
                 setMovies(res.data.results);
                 setTotalPages(res.data.total_pages);
+                setIsloading(false);
             })
             .catch(error => {
                 alert("Erro na requisição dos filmes")
@@ -33,6 +35,7 @@ export default function HomePage() {
                 .then(res => {
                     setMovies(res.data.results);
                     setTotalPages(res.data.total_pages);
+                    setIsloading(false);
                 })
                 .catch(error => {
                     alert("Erro na requisição dos filmes")
@@ -41,26 +44,26 @@ export default function HomePage() {
         }
     }
 
-    const handleChangeFilter = (e) =>{
+    const handleChangeFilter = (e) => {
         setSearchTitle(e.target.value);
         setPage(1);
     }
 
     const submitFilter = () => {
-        if(movies){
-            setMovies(null);
+        if (!isLoading) {
+            setIsloading(true);
         }
-        if(searchTitle !== "" || searchTitle !== undefined){
-            setTimeout(getFilteredMovies, 2000);   
-        }else{
+        if (searchTitle !== "" || searchTitle !== undefined) {
+            setTimeout(getFilteredMovies, 2000);
+        } else {
             setTimeout(getMovies, 2000);
         }
     }
 
     useEffect(() => {
-        if(searchTitle !== "" || searchTitle !== undefined){
+        if (searchTitle !== "" || searchTitle !== undefined) {
             getFilteredMovies();
-        }else{
+        } else {
             getMovies();
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -73,15 +76,15 @@ export default function HomePage() {
                     <img alt="" src={Logo} />
                     <SearchInput onChange={(e) => handleChangeFilter(e)} onKeyUp={submitFilter} placeholder="Pesquisar" />
                 </HeaderHome>
-                {movies ?
+                {isLoading ?
+                    <ListContainer>
+                        <ContainerLoading />
+                    </ListContainer>
+                    :
                     <ListContainer>
                         {movies.map((item, index) => (
                             <MovieCard poster={item.poster_path} title={item.title} date={item.release_date} rating={item.vote_average} key={index} />
                         ))}
-                    </ListContainer> 
-                    :
-                    <ListContainer>
-                        <ContainerLoading />
                     </ListContainer>
                 }
                 <CustomPagination setPage={setPage} pagecurrent={page} total={totalPages} />

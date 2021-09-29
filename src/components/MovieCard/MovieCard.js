@@ -1,5 +1,6 @@
 import React from 'react';
 import { CardMovie, MoviePoster, MovieTitle, MovieInfo, MovieDetails } from './styledMovieCard';
+import StarIcon from '@material-ui/icons/Star';
 
 export default function MovieCard(props){
 
@@ -12,7 +13,7 @@ export default function MovieCard(props){
                 <MovieTitle>{props.title}</MovieTitle>
                 <MovieDetails>
                     <MovieInfo style={{ color: "white" }} >{props.date}</MovieInfo>
-                    <MovieInfo style={{ color: "#0077be" }} >{props.rating}</MovieInfo>
+                    <MovieInfo style={{ color: "#0077be" }} >{props.rating}<StarIcon /></MovieInfo>
                 </MovieDetails>
             </CardMovie>
         </>

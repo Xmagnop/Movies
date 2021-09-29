@@ -1,0 +1,14 @@
+.css-bf9wz-MuiButtonBase-root-MuiPaginationItem-root{
+    color: white !important;
+}
+.css-1hxrwmy-MuiButtonBase-root-MuiPaginationItem-root{
+    color: white !important;
+}
+
+.pagination_container {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    align-items: center;
+    margin-top: 15px;
+}

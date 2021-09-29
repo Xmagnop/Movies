@@ -7,6 +7,7 @@ export const CardMovie = styled.div`
     justify-content: center;
     padding: 10px;
     width: 300px;
+    max-height: 550px;
     background-color: #282c34;
     border-radius: 10px;
     margin: 5px 0;

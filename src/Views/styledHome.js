@@ -38,4 +38,5 @@ export const ListContainer = styled.div`
     flex-flow: row wrap;
     width: 100%;
     justify-content: space-around;
+    min-height: 100vh;
 `;

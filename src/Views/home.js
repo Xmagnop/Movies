@@ -4,6 +4,7 @@ import Logo from '../images/logo-movies.png';
 import api from '../services/api';
 import MovieCard from '../components/MovieCard/MovieCard';
 import CustomPagination from '../components/Pagination/pagination';
+import ContainerLoading from '../components/loading';
 
 export default function HomePage() {
 
@@ -11,7 +12,6 @@ export default function HomePage() {
     const [totalPages, setTotalPages] = useState(0)
     const [page, setPage] = useState(1)
     const [searchTitle, setSearchTitle] = useState("")
-    // const [filteredMovies, setFilteredMovies] = useState([])
 
     const getMovies = async () => {
         api.get(`/movie/popular?api_key=05219aef37ad48f79afaed988d4298e6&language=en-US&page=${page}`)
@@ -25,50 +25,66 @@ export default function HomePage() {
             });
     }
 
-    const getFilteredMovies = async () =>{
-        if(searchTitle === "" || searchTitle === undefined){
+    const getFilteredMovies = async () => {
+        if (searchTitle === "" || searchTitle === undefined) {
             getMovies();
-        }else{
+        } else {
             api.get(`/search/movie?api_key=05219aef37ad48f79afaed988d4298e6&language=en-US&query=${searchTitle}&page=${page}&include_adult=false`)
-            .then(res => {
-                setMovies(res.data.results);
-                setTotalPages(res.data.total_pages);
-            })
-            .catch(error => {
-                alert("Erro na requisição dos filmes")
-                console.log(error);
-            });
+                .then(res => {
+                    setMovies(res.data.results);
+                    setTotalPages(res.data.total_pages);
+                })
+                .catch(error => {
+                    alert("Erro na requisição dos filmes")
+                    console.log(error);
+                });
         }
     }
 
-    const handleFilter = () =>{
-        setTimeout(getFilteredMovies, 2000);
+    const handleChangeFilter = (e) =>{
+        setSearchTitle(e.target.value);
+        setPage(1);
+    }
+
+    const submitFilter = () => {
+        if(movies){
+            setMovies(null);
+        }
+        if(searchTitle !== "" || searchTitle !== undefined){
+            setTimeout(getFilteredMovies, 2000);   
+        }else{
+            setTimeout(getMovies, 2000);
+        }
     }
 
     useEffect(() => {
-        getMovies();
-    },[page]);
-
-    // useEffect(() => {
-    //     console.log(movies)
-    // }, [movies]);
+        if(searchTitle !== "" || searchTitle !== undefined){
+            getFilteredMovies();
+        }else{
+            getMovies();
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [page]);
 
     return (
         <>
             <PageHome>
                 <HeaderHome>
                     <img alt="" src={Logo} />
-                    <SearchInput onChange={(e)=>setSearchTitle(e.target.value)} onKeyUp={handleFilter} placeholder="Pesquisar" />
+                    <SearchInput onChange={(e) => handleChangeFilter(e)} onKeyUp={submitFilter} placeholder="Pesquisar" />
                 </HeaderHome>
                 {movies ?
                     <ListContainer>
-                            {movies.map((item, index) => (
-                                <MovieCard poster={item.poster_path} title={item.title} date={item.release_date} rating={item.vote_average} key={index} />
-                            ))}
-                    </ListContainer> : <h1>carregando</h1>}
-                    <CustomPagination setPage={setPage} total={totalPages} />
-                    <p>{page}</p>
-                    {/* <Pagination count={totalPages} boundaryCount={1} color="primary" shape="circular" /> */}
+                        {movies.map((item, index) => (
+                            <MovieCard poster={item.poster_path} title={item.title} date={item.release_date} rating={item.vote_average} key={index} />
+                        ))}
+                    </ListContainer> 
+                    :
+                    <ListContainer>
+                        <ContainerLoading />
+                    </ListContainer>
+                }
+                <CustomPagination setPage={setPage} pagecurrent={page} total={totalPages} />
             </PageHome>
         </>
     )

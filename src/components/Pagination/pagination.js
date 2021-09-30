@@ -10,6 +10,7 @@ const CustomPagination = (props) =>{
 
     const handleChangePage = (page) =>{
         props.setPage(parseInt(page));
+        props.setLoading(true);
         setCurrent(parseInt(page));
         window.scroll(0, 0);
     }
@@ -20,7 +21,7 @@ const CustomPagination = (props) =>{
 
     return(
         <div className="pagination_container">
-            <Pagination count={props.total} page={current} color="primary" size={ width > 539 ? "large" : "small" } onChange={(e) => handleChangePage(e.target.textContent)} />
+            <Pagination hideNextButton="false" hidePrevButton="false" count={props.total} page={current} color="primary" size={ width > 539 ? "large" : "small" } onChange={(e) => handleChangePage(e.target.textContent)} />
         </div>
     )
 

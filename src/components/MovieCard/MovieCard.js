@@ -1,14 +1,16 @@
 import React from 'react';
 import { CardMovie, MoviePoster, MovieTitle, MovieInfo, MovieDetails } from './styledMovieCard';
 import StarIcon from '@material-ui/icons/Star';
+import { useHistory } from 'react-router';
 
 export default function MovieCard(props){
 
+    const history = useHistory();
     const img_300 = "https://image.tmdb.org/t/p/w300";
 
     return(
         <>
-            <CardMovie>
+            <CardMovie onClick={()=>history.push(`/home/${props.id}`)} >
                 <MoviePoster alt={props.title} src={`${img_300}/${props.poster}`} />
                 <MovieTitle>{props.title}</MovieTitle>
                 <MovieDetails>

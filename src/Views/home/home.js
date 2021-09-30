@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { PageHome, HeaderHome, SearchInput, ListContainer } from './styledHome';
-import Logo from '../images/logo-movies.png';
-import api from '../services/api';
-import MovieCard from '../components/MovieCard/MovieCard';
-import CustomPagination from '../components/Pagination/pagination';
-import ContainerLoading from '../components/loading';
+import { PageHome, ListContainer } from './styledHome';
+import api from '../../services/api';
+import MovieCard from '../../components/MovieCard/MovieCard';
+import CustomPagination from '../../components/Pagination/pagination';
+import ContainerLoading from '../../components/loading';
+import Header from '../../components/Header/header';
 
 export default function HomePage() {
 
@@ -18,6 +18,7 @@ export default function HomePage() {
         api.get(`/movie/popular?api_key=05219aef37ad48f79afaed988d4298e6&language=en-US&page=${page}`)
             .then(res => {
                 setMovies(res.data.results);
+                console.log(res.data);
                 setTotalPages(res.data.total_pages);
                 setIsloading(false);
             })
@@ -72,10 +73,7 @@ export default function HomePage() {
     return (
         <>
             <PageHome>
-                <HeaderHome>
-                    <img alt="" src={Logo} />
-                    <SearchInput onChange={(e) => handleChangeFilter(e)} onKeyUp={submitFilter} placeholder="Pesquisar" />
-                </HeaderHome>
+                <Header input changeFilter={handleChangeFilter} submitFilter={submitFilter} />
                 {isLoading ?
                     <ListContainer>
                         <ContainerLoading />
@@ -83,11 +81,11 @@ export default function HomePage() {
                     :
                     <ListContainer>
                         {movies.map((item, index) => (
-                            <MovieCard poster={item.poster_path} title={item.title} date={item.release_date} rating={item.vote_average} key={index} />
+                            <MovieCard poster={item.poster_path} title={item.title} date={item.release_date} rating={item.vote_average} key={index} id={item.id} />
                         ))}
                     </ListContainer>
                 }
-                <CustomPagination setPage={setPage} pagecurrent={page} total={totalPages} />
+                <CustomPagination setPage={setPage} pagecurrent={page} total={totalPages} setLoading={setIsloading} />
             </PageHome>
         </>
     )

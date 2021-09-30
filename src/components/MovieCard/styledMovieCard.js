@@ -11,6 +11,10 @@ export const CardMovie = styled.div`
     background-color: #282c34;
     border-radius: 10px;
     margin: 5px 0;
+    cursor: pointer;
+    :hover{
+        background-color: #565656;
+    }
     @media(max-width: 320px) {
         width: 240px
     }

@@ -11,7 +11,6 @@ export const DetailsPage = styled.div`
 export const DetailsContainer = styled.div`
     display: flex;
     flex-flow: row wrap;
-    /* background-color: red; */
     justify-content: space-evenly;
     @media(max-width: 1024px){
         flex-flow: column;
@@ -28,7 +27,6 @@ export const DetailsContent = styled.div`
     display: flex;
     flex-flow: column;
     align-items: center;
-    /* background-color: blue; */
 `;
 
 export const DetailsTitle = styled.h1`
